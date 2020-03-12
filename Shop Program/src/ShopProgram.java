@@ -2,10 +2,14 @@
 public class ShopProgram {
 	
 	public static void intro () {
-		
+		System.out.println("This program supports 4 functions: ");
+		System.out.println("1. Setup Shop ");
+		System.out.println("2. Buy Items ");
+		System.out.println("3. List Items ");
+		System.out.println("4. Checkout  ");
 	}
 	
-	publci static void setupShop(){
+	public static void setupShop(){
 		
 	}
 	
@@ -17,12 +21,12 @@ public class ShopProgram {
 		
 	}
 	
-	public static main checkout(){
+	public static void checkout(){
 		
 	}
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		intro();
 
 	}
 
