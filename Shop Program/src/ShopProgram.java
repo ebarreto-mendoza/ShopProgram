@@ -2,7 +2,23 @@
 public class ShopProgram {
 	
 	public static void intro () {
-		//no pues wow
+		
+	}
+	
+	publci static void setupShop(){
+		
+	}
+	
+	public static void buyItems() {
+		
+	}
+	
+	public static void listItems(){
+		
+	}
+	
+	public static main checkout(){
+		
 	}
 
 	public static void main(String[] args) {
