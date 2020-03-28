@@ -13,7 +13,6 @@ public class ShopProgram {
 	
 	//in case shop hasn't been setup and checks to make sure input is between 1-4
 	public static int checkFunc(int function, Scanner input) {
-		function = intro(input);
 		while(function != 1) {
 			System.out.println("\nShop is not set up yet!\n");
 			function = intro(input);
@@ -21,10 +20,54 @@ public class ShopProgram {
 		return function;
 	}
 	
-	
+	public static String numSuffix(int i) {
+		int rem = i % 10;
+		switch (rem) {
+		case 0:
+		case 4:
+		case 5:
+		case 6:
+		case 7:
+		case 8:
+		case 9:
+			return (i + "th");
+		case 1:
+			if (i % 100 != 11)
+				return (i + "st");
+			else
+				return (i + "th");
+		case 2:
+			if ( i % 100 != 12)
+				return (i + "nd");
+			else
+				return (i +"th");
+		case 3:
+			if (i % 100 != 13)
+				return (i +"rd");
+			else
+				return ( i + "th");
+		default:
+			break;
+		}
+		return "";
+	}
 	
 	public static void setupShop(){
-		System.out.println("Setting up shop...");
+		System.out.print("Please enter the number of items to setup shop:");
+		System.out.println();
+		
+		for(int i = 1; i <= 3; i++) { //FIXME
+			System.out.print("Enter the name of the " + numSuffix(i) + " product: ");
+			System.out.println("Enter the number of packages ('x') to qualify for Special Discount (buy 'x' get 1 free)");
+			System.out.println("for alpha, or 0 if no Special Discount offered: ");
+		}
+		
+		System.out.println("Enter the dollar amount to qualify for Additional Discount ( or 0 if none offered): ");
+		do {
+		System.out.println("Enter the Additional Discount rate (e.g., 0.1 for 10%: ");
+		//if (___ < 0 || ___ > 0.5)
+			//System.out.print("Invalid input. Enter a value > 0 and <= 0.5: );
+		}while (1 < 0 || 0.4 > 0.5); //FIXME
 	}
 	
 	public static void buyItems() {
@@ -41,7 +84,7 @@ public class ShopProgram {
 
 	public static void main(String[] args) {
 		Scanner input = new Scanner (System.in);
-		int function = 0;
+		int function = intro(input);
 		
 		function = checkFunc(function, input);
 		
