@@ -44,16 +44,11 @@ public class ShopProgram {
 	}
 	
 	
-	public static void setupShop(String [] name, double [] price, int [] discount, Scanner input){
-		System.out.print("Please enter the number of items to setup shop:");
-		int num = input.nextInt();
-		name = new String [num + 1];
-		price = new double [num + 1];
-		discount = new int [num + 1];
+	public static void setupShop(String [] name, double [] price, int [] discount, Scanner input) {
 		
 		System.out.println();
 		
-		for(int i = 1; i <= num; i++) { //FIXME
+		for(int i = 1; i < name.length; i++) {
 			System.out.print("Enter the name of the " + numSuffix(i) + " product: ");
 			name[i] = input.next();
 			System.out.print("Enter the per package price of " + name[i] + ": ");
@@ -69,32 +64,61 @@ public class ShopProgram {
 		double adddisc = 0;
 		if (addDisc1 != 0 && addDisc1 > 0) {
 			System.out.print("Enter the Additional Discount rate (e.g., 0.1 for 10%): ");
-			adddisc = input.nextDouble();
+			adddisc = input.nextDouble(); // FIXME
 			while ( adddisc > 0.5 || 0 > adddisc) {
 				System.out.print("Invalid input. Enter a value > 0 and <= 0.5: ");
-				adddisc = input.nextDouble();
+				adddisc = input.nextDouble(); //FIXME
 			}
 		}
 		
+		System.out.println();
+		
 	}
 	
-	public static void buyItems() {
-		System.out.println("Buy these items...");
+	public static void buyItems(String [] name, double [] amount, Scanner input) {
+		System.out.println();
+		for (int i = 1; i < name.length; i++) {
+			System.out.print("Enter the number of " + name[i] +" packages to buy: ");
+			amount[i] = input.nextDouble();
+		}
+		System.out.println();
+		
 	}
 	
-	public static void listItems(){
-		System.out.println("Listing these items...");
+	public static double listItems (String [] name,double [] price, double [] amount, Scanner input){
+		System.out.println();
+		
+		double subTotal = 0;
+		for (int i = 1; i < name.length; i++) {
+			if (amount [i] > 0) {
+			System.out.println(amount[i] + " packages of " + name[i] + " @ $" + price[i] + " per pkg = $" + amount[i] * price[i] ); //Might have to do printf
+			subTotal += amount[i] * price[i];
+			}	
+		}
+		System.out.println();
+		
+		return subTotal;
 	}
 	
-	public static void checkout(){
-		System.out.println("Checking out...");
+	public static void checkout(double subTotal){
+		System.out.println();
+		System.out.println("Original Sub Total:\t\t\t  $" + subTotal);
+		System.out.println("Special Discounts:\t\t\t -$");
+		//subTotal = ;
+		System.out.println("New Sub Total:\t\t\t  $" + subTotal);
+		System.out.println("Additional 20% Discount:\t\t -$");
+		//subTotal = ;
+		System.out.println("Final Sub Total:\t\t\t  $" + subTotal);
+		
+		System.out.println();
 	}
 	
 	public static void run() {
 		Scanner input = new Scanner (System.in);
-		String [] name = new String [1];
-		double [] price = new double [1];
-		int [] discount = new int [1];
+		String [] name;
+		double [] price;
+		int [] discount;
+		double [] amount;
 		int function = intro(input);
 		
 		while (function != 1 || function <= 0 || function > 5) {
@@ -102,11 +126,22 @@ public class ShopProgram {
 			function = intro(input);
 		}
 		
+		System.out.print("Please enter the number of items to setup shop:");
+		int num = input.nextInt();
+		name = new String [num + 1];
+		price = new double [num + 1];
+		discount = new int [num + 1];
 		setupShop(name, price, discount, input);
+		
 		function = intro(input);
 		
 		while (function != 2 || function <= 0 || function > 5) {
 			if (function == 1) {
+				System.out.print("Please enter the number of items to setup shop:");
+				num = input.nextInt();
+				name = new String [num + 1];
+				price = new double [num + 1];
+				discount = new int [num + 1];
 				setupShop(name, price, discount, input);
 				function = intro(input);
 			}
@@ -116,43 +151,54 @@ public class ShopProgram {
 			}  
 		}
 		
-		buyItems();
+		amount = new double [name.length];
+		buyItems(name, amount, input);
 		function = intro(input);
 		
 		while (function != 3 || function <= 0 || function > 5) {
 			if (function == 1) {
+				System.out.print("Please enter the number of items to setup shop:");
+				num = input.nextInt();
+				name = new String [num + 1];
+				price = new double [num + 1];
+				discount = new int [num + 1];
 				setupShop(name, price, discount, input);
 				function = intro(input);
 			}
 			else if (function == 2) {
-				buyItems();
+				buyItems(name, amount, input);
 				function = intro(input); 
 			}  
 			else 
 				function = intro(input);
 		}
 		
-		listItems();
+		double subTotal = listItems(name, price, amount, input);
 		function = intro(input);  
 		
 		while (function != 4 || function <= 0 || function > 5) {
 			if (function == 1) {
+				System.out.print("Please enter the number of items to setup shop:");
+				num = input.nextInt();
+				name = new String [num + 1];
+				price = new double [num + 1];
+				discount = new int [num + 1];
 				setupShop(name, price, discount, input);
 				function = intro(input);
 			}
 			else if (function == 2) {
-				buyItems();
+				buyItems(name, amount, input);
 				function = intro(input); 
 			}  
 			else if (function == 3) {
-				listItems();
+				listItems(name, price, amount, input);
 				function = intro(input);  
 			}
 			else
 				function = intro(input);
 		}
 		
-		checkout();
+		checkout(subTotal);
 		
 		System.out.println("Thanks for coming!");
 		
