@@ -162,6 +162,7 @@ public class ShopProgram {
 		int [] discount;
 		int [] amount;
 		double [] addDisc = new double[2];
+		double subTotal = 0;
 		int function = intro(input);
 		
 		while (function != 1 || function <= 0 || function > 5) {
@@ -200,7 +201,9 @@ public class ShopProgram {
 		function = intro(input);
 		
 		while (function != 3 || function <= 0 || function > 5) {
-			if (function == 1) {
+			if (function == 0)
+				function = intro(input);
+			else if (function == 1) {
 				System.out.print("Please enter the number of items to setup shop: ");
 				num = input.nextInt();
 				name = new String [num + 1];
@@ -214,12 +217,15 @@ public class ShopProgram {
 				buyItems(name, amount, input);
 				function = intro(input); 
 			}  
-			else 
-				function = intro(input);
+			else
+				break;
+				
 		}
 		
-		double subTotal = listItems(name, price, amount, input);
-		function = intro(input);  
+		if(function != 4) {
+			subTotal = listItems(name, price, amount, input);
+			function = intro(input);  
+		}
 		
 		while (function != 4 || function <= 0 || function > 5) {
 			if (function == 1) {
