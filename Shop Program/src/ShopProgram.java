@@ -79,6 +79,10 @@ public class ShopProgram {
 		for (int i = 1; i < name.length; i++) {
 			System.out.print("Enter the number of " + name[i] +" packages to buy: ");
 			amount[i] = input.nextInt();
+			while (amount[i] < 0) {
+				System.out.print("Invalid input. Enter a value >= 0: ");
+				amount[i] = input.nextInt();
+			}
 		}
 		System.out.println();
 		
@@ -139,7 +143,7 @@ public class ShopProgram {
 		
 		if(addDisc[0] != 0) {
 			if(subTotal >= addDisc[0]) {
-				System.out.printf("Additional %d%% Discount:\t\t -$%.2f\n",(int)(addDisc[1] * 100), (subTotal * addDisc[1]));
+				System.out.printf("Additional %d%% Discount:\t -$%.2f\n",(int)(addDisc[1] * 100), (subTotal * addDisc[1]));
 				subTotal = subTotal - (subTotal * addDisc[1]) ;
 			}
 		}
