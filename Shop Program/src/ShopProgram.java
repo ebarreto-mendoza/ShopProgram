@@ -59,6 +59,7 @@ public class ShopProgram {
 			
 		}
 		
+		System.out.println();
 		System.out.print("Enter the dollar amount to qualify for Additional Discount ( or 0 if none offered): ");
 		addDisc[0] = input.nextInt();
 		addDisc[1] = 0;
@@ -88,10 +89,9 @@ public class ShopProgram {
 		
 	}
 	
-	public static double listItems (String [] name,double [] price, int [] amount, Scanner input){
+	public static void listItems (String [] name,double [] price, int [] amount, Scanner input){
 		System.out.println();
 		int counter = 0;
-		double subTotal = 0;
 		
 		for (int i = 1; i < name.length; i++) {
 			if(amount[i] > 0)
@@ -106,27 +106,28 @@ public class ShopProgram {
 			for (int i = 1; i < name.length; i++) {
 				if (amount[i] > 0) {
 					System.out.printf("%d packages of %s @ $%.2f per pkg = $%.2f\n",amount[i], name[i], price[i], amount[i] * price[i] );
-					subTotal += amount[i] * price[i];
 				}	
 			}
 		}
 		System.out.println();
-		
-		return subTotal;
 	}
 	
 	public static void checkout(double subTotal, int [] discount, int [] amount, double [] price, double [] addDisc){
-		int counter = 0;
 		double dis = 0.00;
 		for (int i = 1; i < discount.length; i++) {
 			if(discount[i] > 0) { 
-				counter++;
 				if(amount[i] >= discount[i]) {
 					int x = (amount[i] / (discount[i] + 1));
 					dis += x * price[i];
 				}
 			}
 			
+		}
+		
+		for (int i = 1; i < discount.length; i++) {
+			if (amount[i] > 0) {
+				subTotal += amount[i] * price[i];
+			}	
 		}
 		
 		System.out.println();
@@ -223,7 +224,7 @@ public class ShopProgram {
 		}
 		
 		if(function != 4) {
-			subTotal = listItems(name, price, amount, input);
+			listItems(name, price, amount, input);
 			function = intro(input);  
 		}
 		
@@ -243,7 +244,7 @@ public class ShopProgram {
 				function = intro(input); 
 			}  
 			else if (function == 3) {
-				subTotal = listItems(name, price, amount, input);
+				listItems(name, price, amount, input);
 				function = intro(input);  
 			}
 			else
