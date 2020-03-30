@@ -44,7 +44,7 @@ public class ShopProgram {
 	}
 	
 	
-	public static void setupShop(String [] name, double [] price, int [] discount, Scanner input) {
+	public static void setupShop(String [] name, double [] price, int [] discount, double [] addDisc, Scanner input) {
 		
 		System.out.println();
 		
@@ -54,61 +54,97 @@ public class ShopProgram {
 			System.out.print("Enter the per package price of " + name[i] + ": ");
 			price[i] = input.nextDouble();
 			System.out.println("Enter the number of packages ('x') to qualify for Special Discount (buy 'x' get 1 free)");
-			System.out.print("for alpha, or 0 if no Special Discount offered: ");
+			System.out.print("for " + name[i] + " , or 0 if no Special Discount offered: ");
 			discount[i] = input.nextInt();
 			
 		}
 		
-		System.out.println("Enter the dollar amount to qualify for Additional Discount ( or 0 if none offered): ");
-		double addDisc1 = input.nextDouble();
-		double adddisc = 0;
-		if (addDisc1 != 0 && addDisc1 > 0) {
+		System.out.print("Enter the dollar amount to qualify for Additional Discount ( or 0 if none offered): ");
+		addDisc[0] = input.nextInt();
+		addDisc[1] = 0;
+		if (addDisc[0] != 0 && addDisc[0] > 0) {
 			System.out.print("Enter the Additional Discount rate (e.g., 0.1 for 10%): ");
-			adddisc = input.nextDouble(); // FIXME
-			while ( adddisc > 0.5 || 0 > adddisc) {
+			addDisc[1] = input.nextDouble(); 
+			while ( addDisc[1] > 0.5 || 0 > addDisc[1]) {
 				System.out.print("Invalid input. Enter a value > 0 and <= 0.5: ");
-				adddisc = input.nextDouble(); //FIXME
+				addDisc[1] = input.nextDouble(); 
 			}
 		}
-		
 		System.out.println();
 		
 	}
 	
-	public static void buyItems(String [] name, double [] amount, Scanner input) {
+	public static void buyItems(String [] name, int [] amount, Scanner input) {
 		System.out.println();
 		for (int i = 1; i < name.length; i++) {
 			System.out.print("Enter the number of " + name[i] +" packages to buy: ");
-			amount[i] = input.nextDouble();
+			amount[i] = input.nextInt();
 		}
 		System.out.println();
 		
 	}
 	
-	public static double listItems (String [] name,double [] price, double [] amount, Scanner input){
+	public static double listItems (String [] name,double [] price, int [] amount, Scanner input){
 		System.out.println();
-		
+		int counter = 0;
 		double subTotal = 0;
+		
 		for (int i = 1; i < name.length; i++) {
-			if (amount [i] > 0) {
-			System.out.println(amount[i] + " packages of " + name[i] + " @ $" + price[i] + " per pkg = $" + amount[i] * price[i] ); //Might have to do printf
-			subTotal += amount[i] * price[i];
-			}	
+			if(amount[i] > 0)
+				counter++;
+		}
+		
+		if (counter == 0) {
+			System.out.print("No items were purchased.");
+			System.out.println();
+		}
+		else {
+			for (int i = 1; i < name.length; i++) {
+				if (amount[i] > 0) {
+					System.out.printf("%d packages of %s @ $%.2f per pkg = $%.2f\n",amount[i], name[i], price[i], amount[i] * price[i] );
+					subTotal += amount[i] * price[i];
+				}	
+			}
 		}
 		System.out.println();
 		
 		return subTotal;
 	}
 	
-	public static void checkout(double subTotal){
+	public static void checkout(double subTotal, int [] discount, int [] amount, double [] price, double [] addDisc){
+		int counter = 0;
+		double dis = 0.00;
+		for (int i = 1; i < discount.length; i++) {
+			if(discount[i] > 0) { 
+				counter++;
+				if(amount[i] >= discount[i]) {
+					int x = (amount[i] / (discount[i] + 1));
+					dis += x * price[i];
+				}
+			}
+			
+		}
+		
 		System.out.println();
-		System.out.println("Original Sub Total:\t\t\t  $" + subTotal);
-		System.out.println("Special Discounts:\t\t\t -$");
-		//subTotal = ;
-		System.out.println("New Sub Total:\t\t\t  $" + subTotal);
-		System.out.println("Additional 20% Discount:\t\t -$");
-		//subTotal = ;
-		System.out.println("Final Sub Total:\t\t\t  $" + subTotal);
+		System.out.printf("Original Sub Total:\t  $%.2f\n", subTotal);
+		
+		if(counter == 0)
+			System.out.println("No Special Discounts applied");
+		else {
+			System.out.printf("Special Discounts:\t -$%.2f\n", dis);
+			subTotal = subTotal - dis ;
+		}
+		
+		System.out.printf("New Sub Total:\t\t  $%.2f\n", subTotal);
+		
+		if(subTotal >= addDisc[0]) {
+			System.out.printf("Additional %d%% Discount: -$%.2f\n",(int)(addDisc[1] * 100), (subTotal * addDisc[1]));
+			subTotal = subTotal - (subTotal * addDisc[1]) ;
+		}
+		else
+			System.out.println("You did not qualify for an Additional Discount");
+		
+		System.out.printf("Final Sub Total:\t  $%.2f",subTotal);
 		
 		System.out.println();
 	}
@@ -118,7 +154,8 @@ public class ShopProgram {
 		String [] name;
 		double [] price;
 		int [] discount;
-		double [] amount;
+		int [] amount;
+		double [] addDisc = new double[2];
 		int function = intro(input);
 		
 		while (function != 1 || function <= 0 || function > 5) {
@@ -126,23 +163,25 @@ public class ShopProgram {
 			function = intro(input);
 		}
 		
-		System.out.print("Please enter the number of items to setup shop:");
+		System.out.print("Please enter the number of items to setup shop: ");
 		int num = input.nextInt();
 		name = new String [num + 1];
 		price = new double [num + 1];
 		discount = new int [num + 1];
-		setupShop(name, price, discount, input);
+		amount = new int [num + 1];
+		setupShop(name, price, discount, addDisc, input);
 		
 		function = intro(input);
 		
 		while (function != 2 || function <= 0 || function > 5) {
 			if (function == 1) {
-				System.out.print("Please enter the number of items to setup shop:");
+				System.out.print("Please enter the number of items to setup shop: ");
 				num = input.nextInt();
 				name = new String [num + 1];
 				price = new double [num + 1];
 				discount = new int [num + 1];
-				setupShop(name, price, discount, input);
+				amount = new int [num + 1];
+				setupShop(name, price, discount, addDisc, input);
 				function = intro(input);
 			}
 			else {
@@ -151,18 +190,18 @@ public class ShopProgram {
 			}  
 		}
 		
-		amount = new double [name.length];
 		buyItems(name, amount, input);
 		function = intro(input);
 		
 		while (function != 3 || function <= 0 || function > 5) {
 			if (function == 1) {
-				System.out.print("Please enter the number of items to setup shop:");
+				System.out.print("Please enter the number of items to setup shop: ");
 				num = input.nextInt();
 				name = new String [num + 1];
 				price = new double [num + 1];
 				discount = new int [num + 1];
-				setupShop(name, price, discount, input);
+				amount = new int [num + 1];
+				setupShop(name, price, discount, addDisc, input);
 				function = intro(input);
 			}
 			else if (function == 2) {
@@ -178,12 +217,13 @@ public class ShopProgram {
 		
 		while (function != 4 || function <= 0 || function > 5) {
 			if (function == 1) {
-				System.out.print("Please enter the number of items to setup shop:");
+				System.out.print("Please enter the number of items to setup shop: ");
 				num = input.nextInt();
 				name = new String [num + 1];
 				price = new double [num + 1];
 				discount = new int [num + 1];
-				setupShop(name, price, discount, input);
+				amount = new int [num + 1];
+				setupShop(name, price, discount, addDisc, input);
 				function = intro(input);
 			}
 			else if (function == 2) {
@@ -198,13 +238,16 @@ public class ShopProgram {
 				function = intro(input);
 		}
 		
-		checkout(subTotal);
+		checkout(subTotal, discount, amount, price, addDisc);
 		
+		System.out.println();
 		System.out.println("Thanks for coming!");
 		
 		System.out.println();
+		System.out.println("--------------------------------------------------");
 		System.out.print("Would you like to re-run? (1 for yes, 0 for no): ");
 		int redo = input.nextInt();
+		System.out.println("--------------------------------------------------");
 
 		System.out.println();
 
