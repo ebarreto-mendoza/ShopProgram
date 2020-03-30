@@ -1,4 +1,4 @@
-import java.util.Scanner;
+import java.util.Scanner;//this time
 public class ShopProgram {
 	
 	public static int intro(Scanner input) {
