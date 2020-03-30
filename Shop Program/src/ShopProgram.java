@@ -126,25 +126,27 @@ public class ShopProgram {
 		}
 		
 		System.out.println();
-		System.out.printf("Original Sub Total:\t  $%.2f\n", subTotal);
+		System.out.printf("Original Sub Total:\t\t  $%.2f\n", subTotal);
 		
-		if(counter == 0)
+		if(dis == 0)
 			System.out.println("No Special Discounts applied");
 		else {
-			System.out.printf("Special Discounts:\t -$%.2f\n", dis);
+			System.out.printf("Special Discounts:\t\t -$%.2f\n", dis);
 			subTotal = subTotal - dis ;
 		}
 		
-		System.out.printf("New Sub Total:\t\t  $%.2f\n", subTotal);
+		System.out.printf("New Sub Total:\t\t\t  $%.2f\n", subTotal);
 		
-		if(subTotal >= addDisc[0]) {
-			System.out.printf("Additional %d%% Discount: -$%.2f\n",(int)(addDisc[1] * 100), (subTotal * addDisc[1]));
-			subTotal = subTotal - (subTotal * addDisc[1]) ;
+		if(addDisc[0] != 0) {
+			if(subTotal >= addDisc[0]) {
+				System.out.printf("Additional %d%% Discount:\t\t -$%.2f\n",(int)(addDisc[1] * 100), (subTotal * addDisc[1]));
+				subTotal = subTotal - (subTotal * addDisc[1]) ;
+			}
 		}
 		else
 			System.out.println("You did not qualify for an Additional Discount");
 		
-		System.out.printf("Final Sub Total:\t  $%.2f",subTotal);
+		System.out.printf("Final Sub Total:\t\t  $%.2f",subTotal);
 		
 		System.out.println();
 	}
@@ -231,7 +233,7 @@ public class ShopProgram {
 				function = intro(input); 
 			}  
 			else if (function == 3) {
-				listItems(name, price, amount, input);
+				subTotal = listItems(name, price, amount, input);
 				function = intro(input);  
 			}
 			else
